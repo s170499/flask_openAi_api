@@ -39,10 +39,3 @@ if __name__ == '__main__':
 # cd application
 # python app.py
 #cmd - curl -X POST http://127.0.0.1:8000/ask -H "Content-Type: application/json" -d "{\"question\": \"What is food?\"}"
- data = request.get_json()
-        if not data or 'question' not in data:
-            return jsonify({"error": "Invalid payload, must contain 'question'"}), 400
-
-        question = data['question']
-        response = {"question": question, "answer": "This is a placeholder answer."}
-        return jsonify(response), 200
