@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from models.config import Config
+from .config import Config
 
 db = SQLAlchemy()
 
@@ -10,7 +10,5 @@ def create_app():
     db.init_app(app)
 
     with app.app_context():
-        from models import models
         db.create_all()
-
     return app

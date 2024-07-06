@@ -2,15 +2,15 @@ version: '3.8'
 
 services:
   db:
-    image: postgres:16
+    image:  postgres:16
     environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: mydatabase
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "5443:5443"
 
   web:
     build: .
@@ -21,7 +21,7 @@ services:
       - "8000:8000"
     environment:
       FLASK_ENV: development
-      DATABASE_URL: postgresql+psycopg2://myuser:mypassword@db:5432/mydatabase
+      DATABASE_URL: postgresql+psycopg2://postgres:123@db:5443/postgres
     depends_on:
       - db
 
