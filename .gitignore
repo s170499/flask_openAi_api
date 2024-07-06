@@ -1,5 +1,8 @@
 .env
 
+tests
+
+
 *.pyc
 __pycache__/
 
