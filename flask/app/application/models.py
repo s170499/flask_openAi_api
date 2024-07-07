@@ -1,12 +1,13 @@
 from . import db
 
-class Question(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    question = db.Column(db.String(500), nullable=False)
+class Q_and_A(db.Model):
+    question = db.Column(db.String(500), primary_key=True)
     answer = db.Column(db.String(500), nullable=False)
+    timestamp = db.Column(db.DateTime, nullable=False)
 
     def __repr__(self):
-        return f'<Question {self.question}>'
+        return f"Q_and_A {self.question}, answer {self.answer}, registered on {self.timestamp}"
+        
     
 
 

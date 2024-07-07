@@ -1,6 +1,6 @@
 # flask openAI Q&A back-end server
 
-This project is a simple Flask server that exposes an endpoint to ask a question. The server sends the question to an OpenAI API, receives the answer, and saves both the question and the answer in a PostgreSQL database. 
+This project is a simple Flask server that exposes an endpoint to ask a question. The server sends the question to an OpenAI API, receives the answer, and saves both the question and the answer in a PostgreSQL database(I am using an official PostgreSQL-16 image).
 The server and the database are dockerized and run with Docker Compose.
 Furthermore i used SQLAlchemy for ORM and Alembic for database migrations, and the tests are using pytest.
 
@@ -36,16 +36,30 @@ To start the project:
 ```
 docker compose up --build
 ```
-
-## Test
-You can and should replece the question to test the endpoint.
-
-- In Command Prompt run:
+To disable application:
 ```
-curl -X POST http://127.0.0.1:5000/ask -H "Content-Type: application/json" -d "{\"question\":\"What is the capital of France?\"}"
+docker compose down
+```
+
+## Testing flask
+- **Option 1**:You can and should replece the question to test the endpoint.
+
+- In Command Prompt run:"content": 
+```
+curl -X POST http://127.0.0.1:8000/ask \ -H "Content-Type: application/json" -d \ '{"content": "How does AI work? Explain it in simple terms."}' \
 ```
 - In PowerShell run:
 ```
-curl -X POST http://127.0.0.1:5000/ask -H "Content-Type: application/json" -d '{\"question\":\"What is the capital of France?\"}'
+curl -X POST http://127.0.0.1:8000/ask -H "Content-Type:application/json" -d '{\"question\":\"What is the capital of France?\"}'
 ```
+
+-**Option 2**: Using pytest
+```
+docker-compose up --build
+pytest test.py
+```
+
+
+
+
 

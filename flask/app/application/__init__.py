@@ -1,14 +1,25 @@
 from flask import Flask
+import os
 from flask_sqlalchemy import SQLAlchemy
-from .config import Config
 
 db = SQLAlchemy()
 
 def create_app():
+
     app = Flask(__name__)
-    app.config.from_object(Config)
+
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://{username}:{password}@{host}:{port}/{database}'.format(
+        username=os.environ['RDS_USERNAME'],
+        password=os.environ['RDS_PASSWORD'],
+        host=os.environ['RDS_HOSTNAME'],
+        port=os.environ['RDS_PORT'],
+        database=os.environ['RDS_DB_NAME'],
+    )
+
+    # connect the app to the database
     db.init_app(app)
 
-    with app.app_context():
-        db.create_all()
+    from . import main
+    app.register_blueprint(main, url_prefix='/')
+
     return app
