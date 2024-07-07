@@ -48,16 +48,16 @@ docker-compose exec web alembic upgrade head
 ## Testing flask
 - **Option 1**:You can and should replece the question to test the endpoint.
 
-- In Command Prompt run:"content": 
+In Command Prompt run:"content": 
 ```
 curl -X POST http://127.0.0.1:8000/ask \ -H "Content-Type: application/json" -d \ '{"content": "How does AI work? Explain it in simple terms."}' \
 ```
-- In PowerShell run:
+ In PowerShell run:
 ```
 curl -X POST http://127.0.0.1:8000/ask -H "Content-Type:application/json" -d '{\"question\":\"What is the capital of France?\"}'
 ```
 
--**Option 2**: Using pytest
+- **Option 2**: Using pytest
 ```
 docker-compose up --build
 pytest test.py
