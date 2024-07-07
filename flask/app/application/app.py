@@ -1,15 +1,19 @@
-from . import create_app, db
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 
-application = create_app()
+db = SQLAlchemy()
 
-with application.app_context():
-    db.create_all()
-
-if __name__ == "__main__":
-    application.run(debug=True, host="0.0.0.0")
-
- 
-       
+def create_app():
+    app = Flask(__name__)
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:123@db:5443/postgres'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    db.init_app(app)
+    
+    with app.app_context():
+        from . import main
+        db.create_all()
+        
+    return app
 
   
     

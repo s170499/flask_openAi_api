@@ -14,9 +14,8 @@ services:
 
   web:
     build: .
-    command: flask run --host=0.0.0.0
     volumes:
-      - ./flask/app/application:/app/app
+      - .:/app
     ports:
       - "8000:8000"
     environment:

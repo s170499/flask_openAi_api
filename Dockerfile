@@ -1,17 +1,11 @@
-FROM python:3.9.16
-
-RUN apt-get update && \
-    apt-get install -y postgresql-client-13
+FROM python:3.9-slim
 
 WORKDIR /app
-COPY . /app
 
-COPY requirements.txt .
-RUN pip install -r requirements.txt
+COPY requirements.txt requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
 
 
-EXPOSE 8000
-
-ENV FLASK_APP=app.py
-# Run app.py when the container launches
 CMD ["python", "app.py"]

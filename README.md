@@ -40,6 +40,10 @@ To disable application:
 ```
 docker compose down
 ```
+## Run migrations:
+```
+docker-compose exec web alembic upgrade head
+```
 
 ## Testing flask
 - **Option 1**:You can and should replece the question to test the endpoint.

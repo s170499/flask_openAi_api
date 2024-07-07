@@ -1,37 +1,57 @@
-from flask import Blueprint, request, jsonify
-from . import db
-from models import Q_and_A
-from datetime import datetime
+from flask import request, jsonify, Blueprint
+from .app import db
 from openai import OpenAI
 from dotenv import load_dotenv
 import os
+from models import QandA
+from datetime import datetime
 
 load_dotenv()
-main = Blueprint('main', __name__)
+
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"),)
 
-@main.route('/', methods=['GET'])
-def check():
-    return 'OK', 200
+main_bp = Blueprint('main', __name__)
 
-
-@main.route('/ask', methods=['POST'])
-def ask():
+@main_bp.route('/ask', methods=['POST'])
+def ask_question():
     try:
-        
         data = request.get_json()
-        print('\n\nData\n\n',data,'\n\n')
-        newQ_and_A = Q_and_A(
-            question = data["question"],
-            answer = data["answer"],
-            timestamp = datetime.ctime
+        question = data.get("question")
+
+        if not question:
+            return jsonify({"error": "Question is required"}), 400
+
+        
+        response = client.chat.completions.create(
+            model="text-davinci-003",
+            prompt=question,
+            max_tokens=100
         )
-        db.session.add(newQ_and_A)
+
+        answer = answer = response['choices'][0]['message']['content']
+
+        new_qa = QandA(
+            question=question,
+            answer=answer,
+            timestamp=datetime
+        )
+
+        db.session.add(new_qa)
         db.session.commit()
-        return 'new Q&A added', 200
+
+        return jsonify({"question": question, "answer": answer}), 200
     except Exception as e:
         db.session.rollback()
-        return f'An error occurred: {str(e)}', 500
+        return jsonify({"error": str(e)}), 500
+
+@main_bp.route('/answers', methods=['GET'])
+def list_answers():
+    try:
+        qa_list = db.session.query(QandA).all()
+        return jsonify([{"question": qa.question, "answer": qa.answer, "timestamp": qa.timestamp} for qa in qa_list])
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
 
 
 
